@@ -22,8 +22,7 @@ module DynamicAssets
       raise ActionController::RoutingError.new "No route matches \"#{request.path}\"" unless asset
 
       if Manager.cache?
-        response.cache_control[:public] = true
-        response.cache_control[:max_age] = 365.days
+        headers["Cache-Control"] = "public, max-age=#{365.days}"
         headers["Expires"] = (Time.now + 365.days).utc.httpdate
       end
 
