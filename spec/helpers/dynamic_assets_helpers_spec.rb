@@ -63,8 +63,18 @@ describe DynamicAssetsHelpers do
           end
         end
 
-        context "when config.asset_host is set to a.example.com" do
+        context "when config.asset_host is set to http://a.example.com" do
           before { helper.config.stub(:asset_host).and_return "http://a.example.com" }
+
+          it "is three tags with hrefs whose host is a.example.com" do
+            should contain_string 'href="http://a.example.com/assets/stylesheets/v/123/a.css"'
+            should contain_string 'href="http://a.example.com/assets/stylesheets/v/456/b.css"'
+            should contain_string 'href="http://a.example.com/assets/stylesheets/v/789/c.css"'
+          end
+        end
+        
+        context "when config.asset_host is set to a.example.com" do
+          before { helper.config.stub(:asset_host).and_return "a.example.com" }
 
           it "is three tags with hrefs whose host is a.example.com" do
             should contain_string 'href="http://a.example.com/assets/stylesheets/v/123/a.css"'

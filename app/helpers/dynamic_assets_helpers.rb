@@ -45,9 +45,16 @@ protected
     path = "/" + path unless path[0,1] == "/"
 
     host = compute_asset_host path
+    if controller.respond_to?(:request) && host.present? && !is_uri?(host)
+      host = "#{controller.request.protocol}#{host}"
+    end
     host ? "#{host}#{path}" : path
   end
 
+  def is_uri?(path)
+    path =~ %r{^[-a-z]+://|^cid:}
+  end
+  
   # Extracted from Rails' AssetTagHelper, where it's private
   def compute_asset_host(source)
     if host = config.asset_host
